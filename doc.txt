@@ -1,0 +1,19 @@
+myleibinfeng---%%$##%%()-我的测试
+
+
+$params['param'] = "{
+                'businessCode' : '2018',//业务ID
+                'params':{
+                    'keyword': $czId,//搜索关键字(必备节点，全部用'*:*')
+                    'type': 1,//0 按关键字搜索 1 按配件品牌ID搜索(keyword传入品牌ID) 2 按配件三级分类ID搜索
+                                //3按车型ID进行搜索 6 accId进行搜索
+                    //'facetFields': '',
+                    //筛选条件 accBrandName 配件品牌  typeName2配件二级分类  typeName3配件三级分类
+                    //'sort': 0, //排序 0 默认排序 1 价格降序 2 价格升序
+                    //'pageNo': 1,//当前页号
+                    //'pageSize': 100,//页面容量
+                    //'storeId':'',//仓库ID（获取库存时需要 非必输）
+                    //'systemType':'',//获取库存位置（00/20）
+                },
+
+        }";
