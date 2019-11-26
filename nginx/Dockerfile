@@ -4,7 +4,7 @@ LABEL maintainer="leibinfeng <290887098@qq.com>"
 
 COPY nginx.conf /etc/nginx/
 
-#ADD ./startup.sh /opt/startup.sh
+ADD ./startup.sh /opt/startup.sh
 CMD ["/bin/bash", "/opt/startup.sh"]
 
 EXPOSE 80 443
