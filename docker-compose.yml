@@ -32,8 +32,6 @@ services:
     networks:
       - frontend
       - backend
-    links:
-      - docker-in-docker
 
   ### PHP-FPM ##############################################
   php-fpm:
