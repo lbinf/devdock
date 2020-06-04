@@ -18,8 +18,8 @@ services:
       - /kalading/webroot:/kalading/webroot 
       - /kalading/webroot/nginx:/etc/nginx/conf.d/
     ports:
-      - "${NGINX_HOST_HTTP_PORT}:80"
-      - "${NGINX_HOST_HTTPS_PORT}:443"
+      - "80:80"
+      #- "443:443"
     extra_hosts:
       - "dockerhost:${DOCKER_HOST_IP}"
       #replace_extra_host#

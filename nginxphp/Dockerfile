@@ -1,4 +1,4 @@
-FROM dev-php71-nginx:v1:v1
+FROM dev-php71-nginx:v1
 
 LABEL maintainer="leibinfeng <290887098@qq.com>"
 

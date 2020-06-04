@@ -67,7 +67,6 @@ generate_self_env(){
     if [ -z "$2" ] ; then
     	projects=`ls -l ${userDir} |grep ^d | awk '{print $9}'`
 
-
     	for project in ${projects} 
     	do
             generate_self_env_one $project
@@ -84,7 +83,6 @@ generate_self_env_one(){
         print_style "缺少工程\$project参数 \n\n" "danger"
     fi
 
-   
 	  projectEnvDir=$userDir/$1/environments/dev
     destinationEnvDir=$userEnvDir/$1/dev
 
@@ -99,12 +97,52 @@ generate_self_env_one(){
         print_style "执行命令 cp -Rf $projectEnvDir/* $destinationEnvDir \n" "info"
 
         #替换已生的环境配置，其中的域名替换为个人的域名
+        find ./ -type f | xargs sed  -ri 's/(dev)(\.[^php])/$1\2/g'
+        #find ./ -type f | xargs grep
 
     fi
 
-    #替换已生的环境配置，其中的域名替换为个人的域名
+    #nginx配置目录
+    nginxTemplatesDir=$rootDir/nginx_template
+    nginxUserDir=$userDir/$1/nginx
+    nginxDestinationDir=$rootDir/nginx
 
-    #生成docker-compose ngingx配置文件
+    if [ ! -d "$nginxUserDir" ]; then
+        mkdir -p $nginxUserDir
+    fi
+
+    #复制nginx配置到用户配置目录
+    $nginxUserDir
+    \cp -Rf $nginxTemplatesDir/* $nginxUserDir
+    print_style "执行命令 cp -Rf $nginxTemplatesDir/* $nginxUserDir \n" "info"
+
+    #批量替换文件名
+    ls $nginxUserDir | sed -r 's#dev(.*)#mv & $1.\1#' | bash
+
+    #批量替换配置
+    find ./ -type f | xargs sed  -ri 's/dev/$1/g'
+    #生成dockerhost映射，根据host_template
+
+    nginxTemplateFile=$rootDir/nginx_template
+    dockerComposerFile=$rootDir/devdock/
+
+    if [ -f "$nginxTemplateFile" ]
+    then
+      echo "$nginxTemplateFile found."
+
+      #while IFS='=' read -r key value
+      while read line
+      do
+        if [ -n "$line" ];then
+            echo "${line}"
+        fi
+      done < "$nginxTemplateFile"
+
+    else
+      echo "$nginxTemplateFile not found."
+    fi
+
+    #生成docker-compose
 }
 
  # 目录是否存在
