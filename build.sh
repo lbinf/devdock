@@ -69,37 +69,10 @@ generate_self_env(){
 
     	for project in ${projects} 
     	do
-            generate_self_env_one $project
+            generate_self_env_one $1 $project
     	done
     else
-    	generate_self_env_one $2	
-    fi
-
-}
-
-generate_self_env_one(){
-
-    if [ -z "$1" ]; then
-        print_style "缺少工程\$project参数 \n\n" "danger"
-    fi
-
-	  projectEnvDir=$userDir/$1/environments/dev
-    destinationEnvDir=$userEnvDir/$1/dev
-
-    if [ -d "$projectEnvDir" ]; then
-        print_style "生成项目$1配置文件 path=$userDir/$1 \n" "info"
-
-        if [ ! -d "$destinationEnvDir" ]; then
-            mkdir -p $destinationEnvDir
-        fi
-
-        \cp -Rf $projectEnvDir/* $destinationEnvDir
-        print_style "执行命令 cp -Rf $projectEnvDir/* $destinationEnvDir \n" "info"
-
-        #替换已生的环境配置，其中的域名替换为个人的域名
-        find ./ -type f | xargs sed  -ri 's/(dev)(\.[^php])/$1\2/g'
-        #find ./ -type f | xargs grep
-
+    	generate_self_env_one $1 $2
     fi
 
     #nginx配置目录
@@ -112,7 +85,6 @@ generate_self_env_one(){
     fi
 
     #复制nginx配置到用户配置目录
-    $nginxUserDir
     \cp -Rf $nginxTemplatesDir/* $nginxUserDir
     print_style "执行命令 cp -Rf $nginxTemplatesDir/* $nginxUserDir \n" "info"
 
@@ -120,7 +92,7 @@ generate_self_env_one(){
     ls $nginxUserDir | sed -r 's#dev(.*)#mv & $1.\1#' | bash
 
     #批量替换配置
-    find ./ -type f | xargs sed  -ri 's/dev/$1/g'
+    find $destinationEnvDir -type f | xargs sed  -ri 's/dev/$1/g'
     #生成dockerhost映射，根据host_template
 
     nginxTemplateFile=$rootDir/nginx_template
@@ -143,6 +115,38 @@ generate_self_env_one(){
     fi
 
     #生成docker-compose
+
+}
+
+generate_self_env_one(){
+
+    if [ -z "$1" ]; then
+        print_style "缺少工程\$1参数 \n\n" "danger"
+    fi
+
+    if [ -z "$2" ]; then
+        print_style "缺少工程\$2参数 \n\n" "danger"
+    fi
+
+	  projectEnvDir=$userDir/$2/environments/dev/
+    destinationEnvDir=$userEnvDir/$2/dev/
+
+    if [ -d "$projectEnvDir" ]; then
+        print_style "生成项目$1配置文件 path=$userDir/$2 \n" "info"
+
+        if [ ! -d "$destinationEnvDir" ]; then
+            mkdir -p $destinationEnvDir
+        fi
+
+        \cp -Rf $projectEnvDir/* $destinationEnvDir
+        print_style "执行命令 cp -Rf $projectEnvDir/* $destinationEnvDir \n" "info"
+
+        #替换已生的环境配置，其中的域名替换为个人的域名
+        find ./ -type f | xargs sed  -ri 's/(dev)(\.[^php])/$1\2/g'
+        #find ./ -type f | xargs grep
+
+    fi
+
 }
 
  # 目录是否存在
@@ -175,7 +179,7 @@ if [ "$1" == "create" ] ; then
     ls $userDir -la
     
     #生成项目配置文件
-    generate_self_env
+    generate_self_env $2 $3
     print_style "创建成功后会重启开发环境\n" "info"
 
 elif [ "$1" == "update" ]; then
