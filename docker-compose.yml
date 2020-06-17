@@ -1,8 +1,6 @@
 version: '3'
 
 networks:
-  frontend:
-    driver: ${NETWORKS_DRIVER}
   backend:
     driver: ${NETWORKS_DRIVER}
 
@@ -15,8 +13,9 @@ services:
     build:
       context: ./nginxphp
     volumes:
-      - /kalading/webroot:/kalading/webroot 
+      - /kalading/webroot:/kalading/webroot
       - /kalading/webroot/nginx:/etc/nginx/conf.d/
+      - /kalading/webroot/supervisor:/etc/supervisor/conf.d
     ports:
       - "80:80"
       #- "443:443"
