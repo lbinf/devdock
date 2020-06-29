@@ -7,6 +7,17 @@ networks:
 
 services:
 
+  rmq0: &rabbitmq
+    # https://hub.docker.com/r/pivotalrabbitmq/rabbitmq-prometheus/tag
+
+
+    image: pivotalrabbitmq/rabbitmq-prometheus:3.9.0-alpha.76-2019.10.30
+    networks:
+      - backend
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+      - "15692:15692"
 
   ### PHP-FPM,NGINX,supervisor Server #########################################
   nginx:
@@ -15,14 +26,41 @@ services:
     volumes:
       - /kalading/webroot:/kalading/webroot
       - /kalading/webroot/nginx:/etc/nginx/conf.d/
-      - /kalading/webroot/supervisor:/etc/supervisor/conf.d
+      - /kalading/webroot/supervisor:/etc/supervisord.d/
     ports:
       - "80:80"
+      - "81:81"
       #- "443:443"
     extra_hosts:
       - "dockerhost:${DOCKER_HOST_IP}"
+      - dev.api.backend.kalading.com:127.0.0.1
+      - dev.api.car.kalading.com:127.0.0.1
+      - dev.api.crm.kalading.com:127.0.0.1
+      - dev.api.jd.kalading.com:127.0.0.1
+      - dev.api.notice.kalading.com:127.0.0.1
+      - dev.api.notify.kalading.com:127.0.0.1
+      - dev.api.scm.kalading.com:127.0.0.1
+      - dev.api.user.kalading.com:127.0.0.1
+      - dev.backend.kalading.com:127.0.0.1
+      - dev.m.kalading.com:127.0.0.1
+      - dev1.api.jd.kalading.com:127.0.0.1
+      - dev1.jd.kalading.com:127.0.0.1
+      - dev.jd.kalading.com:127.0.0.1
+      - dev.scm.kalading.com:127.0.0.1
       #replace_extra_host#
 
+    networks:
+      - backend
+  ### gocron web & node
+  gocron:
+    build:
+      context: ./gocron
+    volumes:
+      - /kalading/webroot:/kalading/webroot
+      #- /kalading/webroot/nginx:/etc/nginx/conf.d/
+    ports:
+      - "5921:5921"
+      - "5920:5920"
     networks:
       - backend
 

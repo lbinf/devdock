@@ -105,28 +105,29 @@ generate_nginx_config(){
 generate_docker_file(){
   #生成dockerhost映射，根据host_template
 
-    if [ -f "$hostTemplateFile" ]; then
-		print_style "$hostTemplateFile found. 添加hos配置\n" "info"
-		#while IFS='=' read -r key value
-		while read line
-		do
-			#echo $line
-			if [ -n "$line" ]; then
-			  print_style "$line \n" "info"
-			  newHost=$(echo $line | sed  "s/dev/$1/")
-			  print_style "$newHost \n" "info"
-			  str=`grep $newHost $dockerComposerFile`
-			  if [[ -z "$str" &&  -n "$newHost" ]]; then
-				sed -i "/#replace_extra_host#/i\      - $newHost:127.0.0.1" $dockerComposerFile
-				print_style " docker-compose.yml 添加 $newHost:127.0.0.1 成功 \n" "info"
-			  else
-				print_style "docker-compose.yml 已经添加过 $newHost:127.0.0.1 \n" "warning"
-			  fi
-			fi
-		done < "$hostTemplateFile"
+    if [ -f "$hostTemplateFile" ]
+    then
+      print_style "$hostTemplateFile found. 添加hos配置\n" "info"
+       #while IFS='=' read -r key value
+      while read line
+      do
+        #echo $line
+        if [ -n "$line" ]; then
+          print_style "$line \n" "info"
+          newHost=$(echo $line | sed  "s/dev/$1/")
+          print_style "$newHost \n" "info"
+          str=`grep $newHost $dockerComposerFile`
+          if [[ -z "$str" &&  -n "$newHost" ]]; then
+            sed -i "/#replace_extra_host#/i\      - $newHost:127.0.0.1" $dockerComposerFile
+            print_style " docker-compose.yml 添加 $newHost:127.0.0.1 成功 \n" "info"
+          else
+            print_style "docker-compose.yml 已经添加过 $newHost:127.0.0.1 \n" "warning"
+          fi
+        fi
+      done < "$hostTemplateFile"
 
     else
-		print_style "$hostTemplateFile not found\n" "danger"
+      print_style "$hostTemplateFile not found\n" "danger"
     fi
 }
 #重启开发环境
@@ -178,50 +179,50 @@ generate_code_dir(){
     # copy 代码目录
 
     if [ -z "$2" ] ; then
-		if [ -d "$userDir" ]; then
-			projects=`ls -l ${devDir} |grep ^d | awk '{print $9}'`
+      if [ -d "$userDir" ]; then
+          projects=`ls -l ${devDir} |grep ^d | awk '{print $9}'`
 
-			for project in ${projects}
-			do
-				userProjectDir=$userDir/$project
-				if [ -d "$userProjectDir" ]; then
-				print_style "项目userProjectDir 已经存在 \n" "danger"
-				else
-				 print_style "复制项目${devDir}/$project 到用户目录 $userDir \n" "info"
-				 \cp -Rf ${devDir}/$project ${userDir}
-				fi
-			done
-		else
-			\cp -Rf ${devDir}/* ${userDir}
-			ls $userDir -lh
-		fi
+          for project in ${projects}
+          do
+              userProjectDir=$userDir/$project
+              if [ -d "$userProjectDir" ]; then
+                print_style "项目userProjectDir 已经存在 \n" "danger"
+              else
+                 print_style "复制项目${devDir}/$project 到用户目录 $userDir \n" "info"
+                 \cp -Rf ${devDir}/$project ${userDir}
+              fi
+          done
+      else
+          \cp -Rf ${devDir}/* ${userDir}
+          ls $userDir -lh
+      fi
 
     else
        projectDevDir=$devDir/$2
-		if [ -d "$projectDevDir" ];then
+       if [ -d "$projectDevDir" ];then
           print_style "复制项目$projectDevDir 到用户目录 $userDir \n" "info"
     	    \cp -Rf ${devDir}/$2 ${userDir}
-		else
+    	 else
     	    print_style "项目$projectDevDir 不存在 \n" "danger"
-		fi
+    	 fi
     fi
 }
 
 #删除用户代码空间
 delete_project_code(){
-	if [[ -z "$2" ]];then
-		rm -rf $userDir
-	else
-		rm -rf $userDir/$2
-	fi;
+  if [[ -z "$2" ]];then
+     rm -rf $userDir
+  else
+     rm -rf $userDir/$2
+  fi;
 }
 #删除用户配置文件
 delete_project_conf(){
-	if [[ -z "$2" ]];then
-		rm -rf $envDir/$1
-	else
-		rm -rf $envDir/$1/$2
-	fi;
+   if [[ -z "$2" ]];then
+     rm -rf $envDir/$1
+  else
+     rm -rf $envDir/$1/$2
+  fi;
 }
 #删除用户nginx配置文件
 delete_nginx_conf(){
@@ -251,6 +252,12 @@ userDir="$rootDir/$2"
 if [ ! -d "$userDir" ] ; then
     print_style "用户$userDir目录不存在,创建用户目录 \n\n" "info"
     mkdir -p $userDir
+
+# cd ${DOCKER_DIR}
+# \cp -Rf environments/${host_env}/* .
+# chmod -R 0755 ${DOCKER_DIR}
+# find . -type d -env runtime|xargs chmod -R 0777
+# find . -type d -env assets |xargs chmod -R 0777
         
 fi
 
@@ -324,40 +331,40 @@ elif [[ "$1" == "deploy" ]]; then
     print_style "当前运行命令目录 `pwd` \n" "info"
     if [[ -z "$isFrontend" ]]; then
     	if [[ "$2" == "dev" ]]; then
-			if [[ "$3" == 'notice' || "$3" == 'notify' ]];then
+	   if [[ "$3" == 'notice' || "$3" == 'notify' ]];then
                 \cp -f environments/dev/.env .env
-			else
-				\cp -R environments/dev/* .
-			fi
+	   else
+        	\cp -R environments/dev/* .
+           fi
     	else
-			if [[ "$3" == 'notice' || "$3" == 'notify' ]];then
+           if [[ "$3" == 'notice' || "$3" == 'notify' ]];then
                 \cp -f environments/$3/dev/.env .env
-			else
-				\cp -R $userEnvDir/$3/dev/* .
-			fi
+           else
+        	\cp -R $userEnvDir/$3/dev/* .
+           fi
     	fi
     
         if [[ "$3" == 'notice' || "$3" == 'notify' ]]; then
             	find . -type d -name storage|xargs chmod -R 0777 
         else
-			find . -type d -name runtime|xargs chmod -R 0777
+   		find . -type d -name runtime|xargs chmod -R 0777
     		find . -type d -name assets|xargs chmod -R 0777
     		rm -f api/runtime/hprose_cache
     		rm -f backend/runtime/hprose_cache
     		rm -f console/runtime/hprose_cache
-			chmod -R 777 common/runtime
+  		chmod -R 777 common/runtime
     		composer dump-autoload -o
     		echo "yes"|php ./yii cache/flush-schema
         fi
     else 
     	\cp -R $userEnvDir/$3/opt/* .
-		#替换为个人域名及配置
-		frontendConf=./src/config/api.js
-		if [[ -f "$frontendConf" ]]; then
+	#替换为个人域名及配置
+	frontendConf=./src/config/api.js
+	if [[ -f "$frontendConf" ]]; then
            sed  -ri "s/dev\./$2\./g"  $frontendConf
            print_style "替换 $3 工程配置文件成功 $frontendConf \n" "info"
         fi
-		yarn install
+	yarn install
         yarn run build
         \cp -R ./dist/* $rootDir/$2/$3
         cd $rootDir/$2/$3
