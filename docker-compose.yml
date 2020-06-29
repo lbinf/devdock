@@ -47,6 +47,48 @@ services:
       - dev1.jd.kalading.com:127.0.0.1
       - dev.jd.kalading.com:127.0.0.1
       - dev.scm.kalading.com:127.0.0.1
+      - lbf.api.backend.kalading.com:127.0.0.1
+      - lbf.api.car.kalading.com:127.0.0.1
+      - lbf.api.crm.kalading.com:127.0.0.1
+      - lbf.api.jd.kalading.com:127.0.0.1
+      - lbf.api.notice.kalading.com:127.0.0.1
+      - lbf.api.notify.kalading.com:127.0.0.1
+      - lbf.api.scm.kalading.com:127.0.0.1
+      - lbf.api.user.kalading.com:127.0.0.1
+      - lbf.backend.kalading.com:127.0.0.1
+      - lbf.m.kalading.com:127.0.0.1
+      - lbf1.api.jd.kalading.com:127.0.0.1
+      - lbf1.jd.kalading.com:127.0.0.1
+      - lbf.jd.kalading.com:127.0.0.1
+      - lbf.scm.kalading.com:127.0.0.1
+      - wjl.api.backend.kalading.com:127.0.0.1
+      - wjl.api.car.kalading.com:127.0.0.1
+      - wjl.api.crm.kalading.com:127.0.0.1
+      - wjl.api.jd.kalading.com:127.0.0.1
+      - wjl.api.notice.kalading.com:127.0.0.1
+      - wjl.api.notify.kalading.com:127.0.0.1
+      - wjl.api.scm.kalading.com:127.0.0.1
+      - wjl.api.user.kalading.com:127.0.0.1
+      - wjl.backend.kalading.com:127.0.0.1
+      - wjl.m.kalading.com:127.0.0.1
+      - wjl1.api.jd.kalading.com:127.0.0.1
+      - wjl1.jd.kalading.com:127.0.0.1
+      - wjl.jd.kalading.com:127.0.0.1
+      - wjl.scm.kalading.com:127.0.0.1
+      - ljx.api.backend.kalading.com:127.0.0.1
+      - ljx.api.car.kalading.com:127.0.0.1
+      - ljx.api.crm.kalading.com:127.0.0.1
+      - ljx.api.jd.kalading.com:127.0.0.1
+      - ljx.api.notice.kalading.com:127.0.0.1
+      - ljx.api.notify.kalading.com:127.0.0.1
+      - ljx.api.scm.kalading.com:127.0.0.1
+      - ljx.api.user.kalading.com:127.0.0.1
+      - ljx.backend.kalading.com:127.0.0.1
+      - ljx.m.kalading.com:127.0.0.1
+      - ljx1.api.jd.kalading.com:127.0.0.1
+      - ljx1.jd.kalading.com:127.0.0.1
+      - ljx.jd.kalading.com:127.0.0.1
+      - ljx.scm.kalading.com:127.0.0.1
       #replace_extra_host#
 
     networks:
